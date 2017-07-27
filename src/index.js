@@ -32,7 +32,7 @@ function router (path) {
     /**
      * @type {Function}
      */
-    const handler = /^\s*class\s+/.test(route.toString()) ? new route().router() : route
+    const handler = /^\s*class\s+/.test(route.toString()) ? new route().router : route
     // put middleware in express
     middleware.use(path, handler)
   }
