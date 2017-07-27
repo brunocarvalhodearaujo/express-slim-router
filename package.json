@@ -1,0 +1,18 @@
+{
+  "name": "express-slim-router",
+  "version": "1.0.0",
+  "description": "middleware for organizing routes of an express application",
+  "license": "MIT",
+  "author": "Bruno Carvalho de Araujo <brunocarvalhodearaujo@gmail.com>",
+  "main": "src/index.js",
+  "typings": "typings.d.ts",
+  "repository": {
+    "url": "https://github.com/brunocarvalhodearaujo/slim-router.git",
+    "type": "git"
+  },
+  "dependencies": {
+    "express": "^4.15.3",
+    "is": "^3.2.1",
+    "require-dir": "^0.3.2"
+  }
+}
