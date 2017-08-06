@@ -6,7 +6,7 @@ const is = require('is')
  * @param {string} path path of folder with routers for express.js
  * @returns {express.Router}
  */
-function router (path) {
+module.exports = function (path) {
   /**
    * @type {{ [ key: number ]: Function }}
    */
@@ -32,12 +32,10 @@ function router (path) {
     /**
      * @type {Function}
      */
-    const handler = /^\s*class\s+/.test(route.toString()) ? new route().router : route
+    const handler = /^\s*class\s+/.test(route.toString()) ? new route().router() : route()
     // put middleware in express
     middleware.use(path, handler)
   }
   // returns all routes loaded
   return middleware
 }
-
-module.exports = router

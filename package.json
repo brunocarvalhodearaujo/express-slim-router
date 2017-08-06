@@ -7,7 +7,7 @@
   "main": "src/index.js",
   "typings": "typings.d.ts",
   "repository": {
-    "url": "https://github.com/brunocarvalhodearaujo/slim-router.git",
+    "url": "https://github.com/brunocarvalhodearaujo/express-slim-router.git",
     "type": "git"
   },
   "dependencies": {
