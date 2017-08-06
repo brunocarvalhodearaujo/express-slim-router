@@ -1,6 +1,6 @@
 {
   "name": "express-slim-router",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "middleware for organizing routes of an express application",
   "license": "MIT",
   "author": "Bruno Carvalho de Araujo <brunocarvalhodearaujo@gmail.com>",
