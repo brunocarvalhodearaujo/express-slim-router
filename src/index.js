@@ -6,7 +6,7 @@ const glob = require('require-glob')
  * @returns {express.Router[]}
  */
 module.exports = (path) => {
-  const packages = glob.sync([ `${path}/**/*.js`, '!*.spec.js' ])
+  const packages = glob.sync([ `${path}/**/*.js`, `!${path}/**/*.spec.js` ])
   const router = []
 
   for (const routes of Object.values(packages)) {
