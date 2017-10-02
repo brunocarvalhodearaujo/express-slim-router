@@ -2,10 +2,10 @@ const express = require('express')
 const glob = require('require-glob')
 
 /**
- * @param {string} path path of folder with routers for express.js
+ * @param {string} path
  * @returns {express.Router[]}
  */
-module.exports = (path) => {
+function router (path) {
   const packages = glob.sync([ `${path}/**/*.js`, `!${path}/**/*.spec.js` ])
   const router = []
 
@@ -35,3 +35,5 @@ module.exports = (path) => {
 
   return router.map(([ path, route ]) => express().use(path, route))
 }
+
+module.exports = router
