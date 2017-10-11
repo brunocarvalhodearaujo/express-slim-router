@@ -1,16 +1,16 @@
 const express = require('express')
-const glob = require('require-glob')
+const from = require('require-glob')
 
 /**
  * @param {string} path
  * @returns {express.Router[]}
  */
-function router (path) {
-  const packages = glob.sync([ `${path}/**/*.js`, `!${path}/**/*.spec.js` ])
-  const router = []
+module.exports = function router (path) {
+  path = from.sync([ `${path}/**/*.js`, `!${path}/**/*.spec.js` ])
+  const router = express()
 
-  for (const routes of Object.values(packages)) {
-    for (const path of Object.keys(routes)) {
+  for (const routes of Object.values(path)) {
+    for (const path in routes) {
       let route = routes[ path ]
 
       if (typeof route !== 'function') {
@@ -23,17 +23,11 @@ function router (path) {
         if ('didMount' in instance) {
           route = instance.didMount()
         }
-
-        if ('router' in instance) {
-          route = instance.router()
-        }
       }
 
-      router.push([ `/${path}`.toLowerCase(), route ])
+      router.use(`/${path}`.toLowerCase(), route)
     }
   }
 
-  return router.map(([ path, route ]) => express().use(path, route))
+  return router
 }
-
-module.exports = router
