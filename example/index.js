@@ -1,6 +1,6 @@
-import express from 'express'
-import router from 'express-slim-router'
+const express = require('express')
+const router = require('../src')
 
-export default express()
-  .use(router(`${__dirname}/routes`))
+express()
+  .use(router(`${__dirname}/routes`).on('mount', () => console.log('dsoakdask')))
   .listen(process.env.PORT || 3000)

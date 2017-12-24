@@ -1,6 +1,6 @@
-import { Router } from 'express'
+const { Router } = require('express')
 
-export class User {
+exports.User = class User {
   get (request, response) {
     response.json({ working: true })
   }
