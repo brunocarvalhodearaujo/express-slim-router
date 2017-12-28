@@ -1,6 +1,6 @@
-const fs = require('fs')
-const path = require('path')
-const console = require('console')
+import fs from 'fs'
+import path from 'path'
+import console from 'console'
 
 /**
  * script autoload
@@ -9,7 +9,7 @@ class Router {
   /**
    * @param {{ cwd?: string|RegExp, verbose: boolean, logger: object, extensions: string[] }} options
    */
-  constructor (options = {}) {
+  constructor (options) {
     this.options = {
       cwd: process.cwd(),
       verbose: false,
@@ -95,23 +95,13 @@ class Router {
   }
 
   /**
-   * @param {any} object
-   * @param {string[]} parts
-   * @param {Function} mod
-   */
-  createNamespace (object, parts, mod) {
-    this.log(`loaded: ${parts[ parts.length - 1 ]}`)
-    // add file as an endpoint
-    object.use('/' + this.getKeyName(parts.pop()).toLowerCase(), mod)
-  }
-
-  /**
    * Into method
    *
-   * @param {Express} object
+   * @param {string} uri
+   * @param {(uri: string, ...callback: function) => void} handler
    * @returns {this}
    */
-  async into (object) {
+  async into (handler) {
     for (const script of this.files) {
       const parts = this.getRelativeTo(script)
         .split(path.sep)
@@ -125,15 +115,17 @@ class Router {
           throw new Error(`Invalid middleware`)
         }
 
+        // create instance of class
         if (/^\s*class\s+/.test(mod.toString())) {
-          const instance = new mod() // eslint-disable-line
+            const instance = new mod() // eslint-disable-line
 
           if ('didMount' in instance) {
-            mod = instance.didMount()
+            mod = instance.didMount.apply(instance)
           }
         }
 
-        this.createNamespace(object, parts, mod)
+        this.log(`loaded: ${parts[ parts.length - 1 ]}`)
+        handler('/' + this.getKeyName(parts.pop()).toLowerCase(), mod)
       } catch (error) {
         throw new Error(`Failed to require: ${script}, because: ${error.message}`)
       }
@@ -143,6 +135,4 @@ class Router {
   }
 }
 
-module.exports = (options) => {
-  return new Router(options)
-}
+export default (options = {}) => new Router(options)

@@ -7,20 +7,19 @@ express-slim-router
 import express from 'express'
 import router from 'express-slim-router'
 
-const app = express()
+const server = express()
 
 router({ cwd: process.cwd() })
   .load('controllers')
-  .into(server)
+  .into((uri, callback) => server.use(uri, callback))
 
-app.listen(3000)
+server.listen(3000)
 ````
 
 ### Instalation
 
 ````sh
 npm install express-slim-router # via npm
-yarn add express-slim-router # via yarn
 ````
 
 ### Features
