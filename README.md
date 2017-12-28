@@ -4,15 +4,17 @@ express-slim-router
 ### Usage
 
 ````js
-const express = require('express')
-const router = require('router')
+import express from 'express'
+import router from 'express-slim-router'
 
-express()
-  .use(router(`${__dirname}/routes`))
-  .listen(3000)
+const app = express()
+
+router({ cwd: __dirname })
+  .load('controllers')
+  .into(server)
+
+app.listen(3000)
 ````
-
-Check out the [example folder](./example) for more!
 
 ### Instalation
 
