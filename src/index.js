@@ -1,11 +1,11 @@
-import fs from 'fs'
-import path from 'path'
-import console from 'console'
+const fs = require('fs')
+const path = require('path')
+const console = require('console')
 
 /**
  * script autoload
  */
-export class Router {
+class Router {
   /**
    * @param {{ cwd?: string|RegExp, verbose: boolean, logger: object, extensions: string[] }} options
    */
@@ -45,7 +45,7 @@ export class Router {
    * @param {string} dirname
    * @returns {this}
    */
-  then (dirname) {
+  when (dirname) {
     const location = path.join(this.options.cwd, dirname)
 
     if (!fs.existsSync(location)) {
@@ -143,4 +143,6 @@ export class Router {
   }
 }
 
-export default (options) => new Router(options)
+module.exports = (options) => {
+  return new Router(options)
+}
