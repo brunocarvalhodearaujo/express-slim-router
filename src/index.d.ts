@@ -1,4 +1,4 @@
-declare class Router {
+export declare class Router {
   constructor(params: { cwd: string, verbose?: boolean, logger?: object, extensions?: string[] })
   load(middleware: Function): this
   then(dirname: string): this
