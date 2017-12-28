@@ -3,7 +3,7 @@ import path from 'path'
 import console from 'console'
 
 /**
- * mjs scripts autoload
+ * script autoload
  */
 export class Router {
   /**
@@ -17,7 +17,10 @@ export class Router {
       extensions: [ 'js', 'mjs' ],
       ...options
     }
-    this.files = [ ]
+    /**
+     * @type {string[]}
+     */
+    this.extension = []
   }
 
   /**
@@ -28,7 +31,10 @@ export class Router {
    */
   log (message, type = 'info') {
     if (this.options.verbose) {
-      message = typeof message === 'string' ? message : message.join(' ')
+      message = typeof message === 'string'
+        ? message
+        : message.join(' ')
+
       this.options.logger[ type ](message)
     }
 
@@ -39,7 +45,7 @@ export class Router {
    * @param {string} dirname
    * @returns {this}
    */
-  load (dirname) {
+  then (dirname) {
     const location = path.join(this.options.cwd, dirname)
 
     if (!fs.existsSync(location)) {
@@ -78,7 +84,7 @@ export class Router {
    * @returns {string[]}
    */
   getRelativeTo (location) {
-    return `.${location.split(this.options.cwd).pop()}`
+    return '.' + location.split(this.options.cwd).pop()
   }
 
   /**
@@ -88,6 +94,11 @@ export class Router {
     return path.basename(name, path.extname(name))
   }
 
+  /**
+   * @param {any} object
+   * @param {string[]} parts
+   * @param {Function} mod
+   */
   createNamespace (object, parts, mod) {
     this.log(`loaded: ${parts[ parts.length - 1 ]}`)
     // add file as an endpoint
@@ -97,7 +108,7 @@ export class Router {
   /**
    * Into method
    *
-   * @param {any} object
+   * @param {Express} object
    * @returns {this}
    */
   async into (object) {

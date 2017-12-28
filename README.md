@@ -9,7 +9,7 @@ import router from 'express-slim-router'
 
 const app = express()
 
-router({ cwd: __dirname })
+router({ cwd: process.cwd() })
   .load('controllers')
   .into(server)
 
@@ -25,5 +25,5 @@ yarn add express-slim-router # via yarn
 
 ### Features
 
-  - autoload es6 class or functions
-  - makes MVC applications easier to work with
+  - support for mjs files, class and functions
+  - makes mvc easier to work with

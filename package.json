@@ -5,7 +5,7 @@
   "license": "MIT",
   "author": "Bruno Carvalho de Araujo <brunocarvalhodearaujo@gmail.com>",
   "main": "src/index.mjs",
-  "typings": "typings.d.ts",
+  "typings": "src/typings.d.ts",
   "repository": {
     "url": "https://github.com/brunocarvalhodearaujo/express-slim-router.git",
     "type": "git"
