@@ -9,10 +9,12 @@ import router from 'express-slim-router'
 
 const server = express()
 
+const routes = express.Router()
 router({ cwd: process.cwd() })
   .load('controllers')
-  .into((uri, callback) => server.use(uri, callback))
+  .into(routes)
 
+server.use('/', routes)
 server.listen(3000)
 ````
 

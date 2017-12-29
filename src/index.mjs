@@ -98,10 +98,10 @@ class Router {
    * Into method
    *
    * @param {string} uri
-   * @param {(uri: string, ...callback: function) => void} handler
+   * @param {{ use: (uri: string, ...callback: function) => this }} object
    * @returns {this}
    */
-  async into (handler) {
+  async into (object) {
     for (const script of this.files) {
       const parts = this.getRelativeTo(script)
         .split(path.sep)
@@ -109,23 +109,21 @@ class Router {
 
       try {
         let mod = await import(script)
-          .then(T => T.default)
+          .then(T => Object.values(T).shift())
 
-        if (typeof mod !== 'function') {
-          throw new Error(`Invalid middleware`)
-        }
-
-        // create instance of class
-        if (/^\s*class\s+/.test(mod.toString())) {
+        if (typeof mod === 'function') {
+          if (/^\s*class\s+/.test(mod.toString())) {
             const instance = new mod() // eslint-disable-line
 
-          if ('didMount' in instance) {
-            mod = instance.didMount.apply(instance)
+            if ('didMount' in instance) {
+              mod = instance.didMount.apply(instance)
+            }
           }
-        }
 
-        this.log(`loaded: ${parts[ parts.length - 1 ]}`)
-        handler('/' + this.getKeyName(parts.pop()).toLowerCase(), mod)
+          this.log(`loaded: ${parts[ parts.length - 1 ]}`)
+          // inject handler
+          object.use('/' + this.getKeyName(parts.pop()).toLowerCase(), mod)
+        }
       } catch (error) {
         throw new Error(`Failed to require: ${script}, because: ${error.message}`)
       }
