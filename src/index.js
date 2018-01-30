@@ -4,10 +4,12 @@ import console from 'console'
 
 /**
  * script autoload
+ *
+ * @typedef {{ cwd?: string|RegExp, verbose: boolean, logger: object, extensions: string[] }} Options
  */
-class Router {
+export class Router {
   /**
-   * @param {{ cwd?: string|RegExp, verbose: boolean, logger: object, extensions: string[] }} options
+   * @param {Options} options
    */
   constructor (options) {
     this.options = {
@@ -20,7 +22,7 @@ class Router {
     /**
      * @type {string[]}
      */
-    this.files = []
+    this.files = [ ]
   }
 
   /**
@@ -101,31 +103,36 @@ class Router {
    * @param {{ use: (uri: string, ...callback: function) => this }} object
    * @returns {this}
    */
-  async into (object) {
-    for (const script of this.files) {
-      const parts = this.getRelativeTo(script)
+  into (object) {
+    for (const file of this.files) {
+      const parts = this.getRelativeTo(file)
         .split(path.sep)
         .slice(1)
 
       try {
-        let mod = await import(script)
-          .then(T => Object.values(T).shift())
-
-        if (typeof mod === 'function') {
-          if (/^\s*class\s+/.test(mod.toString())) {
-            const instance = new mod() // eslint-disable-line
-
-            if ('didMount' in instance) {
-              mod = instance.didMount.apply(instance)
-            }
-          }
-
-          this.log(`loaded: ${parts[ parts.length - 1 ]}`)
-          // inject handler
-          object.use('/' + this.getKeyName(parts.pop()).toLowerCase(), mod)
-        }
+        var mod = Object.values(require(file))
       } catch (error) {
-        throw new Error(`Failed to require: ${script}, because: ${error.message}`)
+        throw new Error(`Failed to require ${file} because: ${error.message}`)
+      }
+
+      for (const i of mod) {
+        if (typeof i !== 'function') {
+          throw new Error('module requires an function')
+        }
+
+        if (/^\s*class\s+/.test(i.toString())) {
+          const instance = new (mod[ mod.indexOf(i) ])() // eslint-disable-line
+
+          if ('didMount' in instance) {
+            mod[ mod.indexOf(i) ] = instance.didMount.apply(instance)
+          }
+        }
+
+        this.log(`loaded: ${parts[ parts.length - 1 ]}`)
+
+        const uri = '/'.concat(this.getKeyName(parts.pop()).toLowerCase())
+
+        object.use(uri, mod)
       }
     }
 
@@ -133,4 +140,9 @@ class Router {
   }
 }
 
-export default (options = {}) => new Router(options)
+/**
+ * @param {Options} options
+ */
+export default function (options = {}) {
+  return new Router(options)
+}

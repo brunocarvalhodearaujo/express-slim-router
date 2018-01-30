@@ -7,15 +7,13 @@ express-slim-router
 import express from 'express'
 import router from 'express-slim-router'
 
-const server = express()
+const app = express()
 
-const routes = express.Router()
 router({ cwd: process.cwd() })
   .load('controllers')
-  .into(routes)
+  .into(app)
 
-server.use('/', routes)
-server.listen(3000)
+app.listen(3000)
 ````
 
 ### Instalation
