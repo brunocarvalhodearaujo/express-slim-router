@@ -1,13 +1,13 @@
-import fs from 'fs'
-import path from 'path'
-import console from 'console'
+const fs = require('fs')
+const path = require('path')
+const console = require('console')
 
 /**
  * script autoload
  *
  * @typedef {{ cwd?: string|RegExp, verbose: boolean, logger: object, extensions: string[] }} Options
  */
-export class Router {
+class Router {
   /**
    * @param {Options} options
    */
@@ -143,6 +143,6 @@ export class Router {
 /**
  * @param {Options} options
  */
-export default function (options = {}) {
+module.exports = function (options = {}) {
   return new Router(options)
 }
