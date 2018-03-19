@@ -5,7 +5,7 @@ const console = require('console')
 /**
  * script autoload
  *
- * @typedef {{ cwd?: string|RegExp, verbose: boolean, logger: object, extensions: string[] }} Options
+ * @typedef {{ cwd?: string|RegExp, verbose: boolean, logger: object, extensions: string[], withNamespace?: boolean }} Options
  */
 class Router {
   /**
@@ -17,6 +17,7 @@ class Router {
       verbose: false,
       logger: console,
       extensions: [ 'js', 'mjs' ],
+      withNamespace: true,
       ...options
     }
     /**
@@ -103,7 +104,7 @@ class Router {
    * @param {{ use: (uri: string, ...callback: function) => this }} object
    * @returns {this}
    */
-  into (object, withNamespace = true) {
+  into (object) {
     for (const file of this.files) {
       const parts = this.getRelativeTo(file)
         .split(path.sep)
@@ -132,9 +133,9 @@ class Router {
 
         const uri = '/'.concat(this.getKeyName(parts.pop()).toLowerCase())
 
-        if (withNamespace) {
-          object.use(uri, mod)
-        } else object.use(mod)
+        this.options.withNamespace
+          ? object.use(uri, mod)
+          : object.use(mod)
       }
     }
 
