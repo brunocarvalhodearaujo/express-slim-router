@@ -103,7 +103,7 @@ class Router {
    * @param {{ use: (uri: string, ...callback: function) => this }} object
    * @returns {this}
    */
-  into (object) {
+  into (object, withNamespace = true) {
     for (const file of this.files) {
       const parts = this.getRelativeTo(file)
         .split(path.sep)
@@ -132,7 +132,9 @@ class Router {
 
         const uri = '/'.concat(this.getKeyName(parts.pop()).toLowerCase())
 
-        object.use(uri, mod)
+        if (withNamespace) {
+          object.use(uri, mod)
+        } else object.use(mod)
       }
     }
 
