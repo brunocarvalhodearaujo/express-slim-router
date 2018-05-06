@@ -111,7 +111,8 @@ class Router {
         .slice(1)
 
       try {
-        var mod = Object.values(require(file))
+        const T = require(file)
+        var mod = Object.keys(T).map(e => T[e])
       } catch (error) {
         throw new Error(`Failed to require ${file} because: ${error.message}`)
       }
