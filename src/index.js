@@ -5,7 +5,7 @@ const console = require('console')
 /**
  * script autoload
  *
- * @typedef {{ cwd?: string|RegExp, verbose: boolean, logger: object, extensions: string[], withNamespace?: boolean }} Options
+ * @typedef {{ cwd?: string|RegExp, verbose: boolean, logger: object, extensions: string[], withNamespace?: boolean }} options
  */
 class Router {
   /**
@@ -16,29 +16,25 @@ class Router {
       cwd: process.cwd(),
       verbose: false,
       logger: console,
-      extensions: [ 'js', 'mjs' ],
+      extensions: ['js', 'mjs'],
       withNamespace: true,
       ...options
     }
     /**
      * @type {string[]}
      */
-    this.files = [ ]
+    this.files = []
   }
 
   /**
    * Log handler.
    *
    * @param {string|string[]} message
-   * @param {string} [type]
+   * @param {'info' | 'warn' | 'error' | 'log'} [type]
    */
   log (message, type = 'info') {
     if (this.options.verbose) {
-      message = typeof message === 'string'
-        ? message
-        : message.join(' ')
-
-      this.options.logger[ type ](message)
+      this.options.logger[type](message)
     }
 
     return this
@@ -62,7 +58,7 @@ class Router {
     }
 
     for (const filename of fs.readdirSync(location)) {
-      const [ extension ] = /[^.]+$/.exec(filename)
+      const [extension] = /[^.]+$/.exec(filename)
 
       if (!this.options.extensions.includes(extension)) {
         this.log(`Ignoring extension: ${extension}`)
@@ -123,14 +119,18 @@ class Router {
         }
 
         if (/^\s*class\s+/.test(i.toString())) {
-          const instance = new (mod[ mod.indexOf(i) ])() // eslint-disable-line
+          const instance = new (mod[mod.indexOf(i)])() // eslint-disable-line
 
           if ('didMount' in instance) {
-            mod[ mod.indexOf(i) ] = instance.didMount.apply(instance)
+            mod[mod.indexOf(i)] = instance.didMount.apply(instance)
+          } else if ('index' in instance) {
+            mod[mod.indexOf(i)] = instance.index.apply(instance)
+          } else {
+            this.log('cannot load route', 'error')
           }
         }
 
-        this.log(`loaded: ${parts[ parts.length - 1 ]}`)
+        this.log(`loaded: ${parts[parts.length - 1]}`)
 
         const uri = '/'.concat(this.getKeyName(parts.pop()).toLowerCase())
 
@@ -145,8 +145,6 @@ class Router {
 }
 
 /**
- * @param {Options} options
+ * @param {options} options
  */
-module.exports = function (options = {}) {
-  return new Router(options)
-}
+module.exports = (options = {}) => new Router(options)
