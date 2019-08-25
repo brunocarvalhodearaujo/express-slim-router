@@ -24,6 +24,10 @@ class Router {
      * @type {string[]}
      */
     this.files = []
+    /**
+     * @type {any[]}
+     */
+    this.extraArguments = []
   }
 
   /**
@@ -94,6 +98,17 @@ class Router {
   }
 
   /**
+   * load an arument with loader
+   *
+   * @param {any} extraArgument
+   */
+  withExtraArgument (extraArgument) {
+    this.extraArguments.push(extraArgument)
+
+    return this
+  }
+
+  /**
    * Into method
    *
    * @param {string} uri
@@ -122,9 +137,9 @@ class Router {
           const instance = new (mod[mod.indexOf(i)])() // eslint-disable-line
 
           if ('didMount' in instance) {
-            mod[mod.indexOf(i)] = instance.didMount.apply(instance)
+            mod[mod.indexOf(i)] = instance.didMount.apply(instance, this.extraArgument)
           } else if ('index' in instance) {
-            mod[mod.indexOf(i)] = instance.index.apply(instance)
+            mod[mod.indexOf(i)] = instance.index.apply(instance, this.extraArgument)
           } else {
             this.log('cannot load route', 'error')
           }
