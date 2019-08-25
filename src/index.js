@@ -137,9 +137,9 @@ class Router {
           const instance = new (mod[mod.indexOf(i)])() // eslint-disable-line
 
           if ('didMount' in instance) {
-            mod[mod.indexOf(i)] = instance.didMount.apply(instance, this.extraArgument)
+            mod[mod.indexOf(i)] = instance.didMount.apply(instance, this.extraArguments)
           } else if ('index' in instance) {
-            mod[mod.indexOf(i)] = instance.index.apply(instance, this.extraArgument)
+            mod[mod.indexOf(i)] = instance.index.apply(instance, this.extraArguments)
           } else {
             this.log('cannot load route', 'error')
           }
