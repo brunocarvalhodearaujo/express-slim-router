@@ -98,12 +98,12 @@ class Router {
   }
 
   /**
-   * load an arument with loader
+   * load an argument with loader
    *
-   * @param {any} extraArgument
+   * @param {...any} extraArgument
    */
-  withExtraArgument (extraArgument) {
-    this.extraArguments.push(extraArgument)
+  withExtraArgument (...extraArgument) {
+    this.extraArguments.push(...extraArgument)
 
     return this
   }
