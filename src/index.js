@@ -103,7 +103,7 @@ class Router {
    * @param {...any} extraArgument
    */
   withExtraArgument (...extraArgument) {
-    this.extraArguments.push(...extraArgument)
+    this.extraArguments = this.extraArguments.concat(extraArgument)
 
     return this
   }
