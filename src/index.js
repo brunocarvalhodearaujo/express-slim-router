@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2020-present, Bruno Carvalho de Araujo.
+ * All rights reserved.
+ *
+ * This source code is licensed under the license found in the LICENSE file in
+ * the root directory of this source tree.
+ */
+
 const fs = require('fs')
 const path = require('path')
 const console = require('console')
@@ -5,7 +13,7 @@ const console = require('console')
 /**
  * script autoload
  *
- * @typedef {{ cwd?: string|RegExp, verbose: boolean, logger: object, extensions: string[], withNamespace?: boolean }} options
+ * @typedef {{ cwd?: string | RegExp, verbose: boolean, logger: object, extensions: string[], withNamespace?: boolean }} options
  */
 class Router {
   /**
