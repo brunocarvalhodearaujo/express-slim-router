@@ -5,7 +5,11 @@
   "license": "MIT",
   "author": "Bruno Carvalho de Araujo <brunocarvalhodearaujo@gmail.com>",
   "main": "src/index.js",
-  "typings": "typings.d.ts",
+  "typings": "src/index.d.ts",
+  "files": [
+    "README.md",
+    "src"
+  ],
   "repository": {
     "url": "https://github.com/brunocarvalhodearaujo/express-slim-router.git",
     "type": "git"

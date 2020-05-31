@@ -19,6 +19,7 @@ export type Options = {
 
 interface Router {
   when (path: string): Router,
+  withExtraArgument (...extraArgument: any): Router,
   into (app: Express | ExpressRouter): Router
 }
 
