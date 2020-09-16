@@ -7,7 +7,7 @@
  */
 
 import { Console } from 'console'
-import { Express, Router as ExpressRouter, NextFunction } from 'express'
+import { Express, Router as ExpressRouter, Request, Response, NextFunction } from 'express'
 
 export type Options = {
   cwd: string | RegExp,
