@@ -7,7 +7,7 @@
  */
 
 import { Console } from 'console'
-import { Express, Router as ExpressRouter } from 'express'
+import { Express, Router as ExpressRouter, NextFunction } from 'express'
 
 export type Options = {
   cwd: string | RegExp,
@@ -25,6 +25,10 @@ interface Router {
 
 export interface Route {
   index (): ExpressRouter | Express
+}
+
+export interface HttpFunction {
+  (request: Request, response: Response, next: NextFunction): void | Promise<void>;
 }
 
 declare function middleware (options?: Options): Router
