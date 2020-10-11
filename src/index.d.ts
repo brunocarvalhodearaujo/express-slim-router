@@ -27,8 +27,8 @@ export interface Route {
   index (): ExpressRouter | Express
 }
 
-export interface HttpFunction {
-  (request: Request, response: Response, next: NextFunction): void | Promise<void>;
+export interface HttpFunction<P = any, ResBody = any, ReqBody = any, ReqQuery = qs.ParsedQs> {
+  (request: Request<P, ResBody, ReqBody, ReqQuery>, response: Response<ResBody>, next: NextFunction): void | Promise<void>;
 }
 
 declare function middleware (options?: Options): Router
