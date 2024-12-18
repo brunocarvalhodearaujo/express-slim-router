@@ -4,24 +4,25 @@ express-slim-router
 ### Usage
 
 ````js
-const express = require('express')
-const router = require('router')
+import express from 'express'
+import router from 'express-slim-router'
 
-express()
-  .use(router(`${__dirname}/routes`))
-  .listen(3000)
+const app = express()
+
+router({ cwd: process.cwd() })
+  .load('controllers')
+  .into(app)
+
+app.listen(3000)
 ````
-
-Check out the [example folder](./example) for more!
 
 ### Instalation
 
 ````sh
 npm install express-slim-router # via npm
-yarn add express-slim-router # via yarn
 ````
 
 ### Features
 
-  - autoload es6 class or functions
-  - makes MVC applications easier to work with
+  - support for mjs files, class and functions
+  - makes mvc easier to work with
